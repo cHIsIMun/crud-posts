@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import PostForm from './components/PostForm';
+import Posts from './components/Posts';
 import axios from 'axios';
 
 const App = () => {
@@ -113,92 +115,6 @@ const App = () => {
       <input type="text" placeholder="Enter post ID" value={searchId} onChange={handleSearch} />
       <Posts posts={filteredPosts} deletePost={deletePost} updatePost={updatePost} />
     </div>
-  );
-};
-
-const Posts = ({ posts, deletePost, updatePost }) => {
-  const [editingId, setEditingId] = useState(null);
-  const [editedTitle, setEditedTitle] = useState('');
-  const [editedBody, setEditedBody] = useState('');
-
-  const handleEdit = (post) => {
-    setEditingId(post.id);
-    setEditedTitle(post.title);
-    setEditedBody(post.body);
-  };
-
-  const handleSave = () => {
-    if (editingId) {
-      updatePost(editingId, editedTitle, editedBody);
-      setEditingId(null);
-    }
-  };
-
-  const handleCancel = () => {
-    setEditingId(null);
-  };
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
-      {posts.map(post => (
-        <div key={post.id}>
-          {editingId === post.id ? (
-            <div>
-              <input
-                type="text"
-                value={editedTitle}
-                onChange={(e) => setEditedTitle(e.target.value)}
-              />
-              <textarea
-                value={editedBody}
-                onChange={(e) => setEditedBody(e.target.value)}
-              ></textarea>
-              <button onClick={handleSave}>Save</button>
-              <button onClick={handleCancel}>Cancel</button>
-            </div>
-          ) : (
-            <div>
-              <h2>{post.title}</h2>
-              <p>{post.body}</p>
-              <button onClick={() => deletePost(post.id)}>Delete</button>
-              <button onClick={() => handleEdit(post)}>Edit</button>
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-
-const PostForm = ({ onSubmit }) => {
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(title, body);
-    setTitle('');
-    setBody('');
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-      />
-      <textarea
-        placeholder="Body"
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
-        required
-      ></textarea>
-      <button type="submit">Create</button>
-    </form>
   );
 };
 
